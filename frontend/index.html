@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Melanoma Screen — Educational Tool</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class="page">
+      <header class="header">
+        <div class="logo">
+          <span class="logo-icon">◉</span>
+          <span>Melanoma Screen</span>
+        </div>
+        <p class="tagline">AI-assisted skin lesion screening</p>
+      </header>
+
+      <section class="disclaimer-banner" role="alert">
+        <strong>Medical disclaimer:</strong> This is not a diagnosis. Results are for
+        educational screening only. See a dermatologist for any concerning skin changes.
+      </section>
+
+      <main class="main">
+        <section class="hero">
+          <h1>Upload a skin lesion photo</h1>
+          <p>
+            Our AI analyzes close-up images of skin lesions to estimate melanoma risk.
+            Works best with clear, well-lit photos of a single lesion.
+          </p>
+        </section>
+
+        <section class="upload-section">
+          <div id="dropzone" class="dropzone" tabindex="0" role="button" aria-label="Upload image">
+            <input type="file" id="file-input" accept="image/jpeg,image/png" hidden />
+            <div class="dropzone-content">
+              <div class="upload-icon">↑</div>
+              <p class="dropzone-title">Drag & drop your image here</p>
+              <p class="dropzone-subtitle">or click to browse (JPEG/PNG, max 10 MB)</p>
+            </div>
+            <img id="preview" class="preview hidden" alt="Uploaded skin lesion preview" />
+          </div>
+
+          <div class="actions">
+            <button id="analyze-btn" class="btn btn-primary" disabled>Analyze Image</button>
+            <button id="clear-btn" class="btn btn-secondary hidden">Clear</button>
+          </div>
+          <p id="status" class="status" aria-live="polite"></p>
+        </section>
+
+        <section id="results" class="results hidden" aria-live="polite">
+          <h2>Analysis Results</h2>
+          <div id="risk-badge" class="risk-badge"></div>
+          <p id="result-summary" class="result-summary"></p>
+          <div class="confidence-bar">
+            <div class="confidence-label">
+              <span>Confidence</span>
+              <span id="confidence-value">—</span>
+            </div>
+            <div class="confidence-track">
+              <div id="confidence-fill" class="confidence-fill"></div>
+            </div>
+          </div>
+          <div class="cta-box">
+            <p id="cta-text"></p>
+            <a
+              href="https://www.aad.org/public/diseases/skin-cancer/find-a-derm"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="btn btn-outline"
+            >
+              Find a Dermatologist
+            </a>
+          </div>
+        </section>
+
+        <section class="tips">
+          <h2>Tips for better photos</h2>
+          <ul>
+            <li>Take a close-up photo of one lesion only</li>
+            <li>Use bright, even lighting (avoid harsh shadows)</li>
+            <li>Keep the camera steady and in focus</li>
+            <li>Fill the frame with the lesion area</li>
+            <li>Avoid filters or heavy editing</li>
+          </ul>
+        </section>
+      </main>
+
+      <footer class="footer">
+        <p>Educational project — not FDA-approved medical software.</p>
+      </footer>
+    </div>
+    <script src="config.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>
