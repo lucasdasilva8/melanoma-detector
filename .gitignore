@@ -6,6 +6,7 @@ venv/
 .env
 .DS_Store
 *.pth
+!models/melanoma_model.pth
 !models/.gitkeep
 .ipynb_checkpoints/
 *.log

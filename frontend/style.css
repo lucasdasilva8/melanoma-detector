@@ -291,6 +291,17 @@ body {
   font-size: 0.95rem;
 }
 
+.prob-breakdown {
+  margin-bottom: 20px;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+.prob-note {
+  margin-top: 6px;
+  font-size: 0.85rem;
+}
+
 .tips {
   background: var(--surface);
   border-radius: var(--radius);

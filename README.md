@@ -52,7 +52,13 @@ Open http://localhost:3000 and upload a test image.
 
 ## Deployment
 
-See [DEPLOY.md](DEPLOY.md) for Render (backend) and GitHub Pages (frontend) instructions.
+Live site (after setup): **https://lucasdasilva8.github.io/melanoma-detector/**
+
+See [DEPLOY.md](DEPLOY.md) for GitHub Pages + Render setup.
+
+## Improving accuracy on phone photos
+
+See [MODEL_IMPROVEMENT.md](MODEL_IMPROVEMENT.md) for retraining with phone-style augmentation and additional datasets.
 
 ## Disclaimer
 

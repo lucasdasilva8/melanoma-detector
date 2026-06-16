@@ -1,70 +1,98 @@
 # Deployment Guide
 
-Deploy the backend to **Render** (free tier) and the frontend to **GitHub Pages**.
+Public URL after setup: **https://lucasdasilva8.github.io/melanoma-detector/**
 
-## Prerequisites
+The site needs two parts:
+- **Frontend** → GitHub Pages (free, automatic)
+- **Backend API** → Render (free tier, hosts the AI model)
 
-- GitHub account
-- [Render](https://render.com) account (free)
-- Trained model at `models/melanoma_model.pth`
+---
 
-## 1. Push to GitHub
+## Part 1: GitHub Pages (frontend) — mostly automatic
 
-```bash
-git add .
-git commit -m "Initial melanoma detection app"
-git remote add origin https://github.com/YOUR_USERNAME/melanoma-detector.git
-git push -u origin main
-```
+The repo includes `.github/workflows/deploy-frontend.yml`. On every push to `main`, GitHub deploys the `frontend/` folder.
 
-> **Note:** `melanoma_model.pth` is gitignored by default (~45 MB). For Render deployment, either:
-> - Use [Git LFS](https://git-lfs.github.com/) to track the model file, or
-> - Upload the model to cloud storage and download it in `render.yaml` build step
+### One-time setup
 
-## 2. Deploy backend (Render)
+1. Open https://github.com/lucasdasilva8/melanoma-detector/settings/pages
+2. Under **Build and deployment** → **Source**, choose **GitHub Actions**
+3. Push to `main` (or merge your feature branch into `main`)
 
-1. Go to [Render Dashboard](https://dashboard.render.com) → **New** → **Blueprint**
-2. Connect your GitHub repo
-3. Render reads `render.yaml` automatically
-4. Set environment variable if needed: none required for basic setup
-5. Deploy — first build takes ~10–15 min (PyTorch is large)
+Your site will be live at:
+**https://lucasdasilva8.github.io/melanoma-detector/**
 
-Your API will be at: `https://melanoma-detector-api.onrender.com` (or similar)
+`frontend/config.js` auto-detects localhost vs production and points to the Render API when hosted on GitHub Pages.
+
+---
+
+## Part 2: Render (backend API) — one-time manual setup
+
+GitHub Pages only hosts static files. The AI model runs on Render.
+
+### Steps
+
+1. Create a free account at https://render.com
+2. Click **New** → **Blueprint**
+3. Connect GitHub repo `lucasdasilva8/melanoma-detector`
+4. Render reads `render.yaml` from the repo root
+5. Click **Apply** — first deploy takes **10–20 minutes** (PyTorch is large)
+
+Your API will be at something like:
+**https://melanoma-detector-api.onrender.com**
 
 Test it:
 
 ```bash
-curl https://YOUR-API-URL.onrender.com/health
+curl https://melanoma-detector-api.onrender.com/health
 ```
 
-## 3. Deploy frontend (GitHub Pages)
+### If your Render URL is different
 
-1. Update `frontend/config.js` with your Render API URL:
+Edit `frontend/config.js` and update the production URL in the `API_URL` line, then push to `main`.
 
-```javascript
-window.APP_CONFIG = {
-  API_URL: "https://YOUR-API-URL.onrender.com",
-};
+### Model file requirement
+
+The backend needs `models/melanoma_model.pth` in the repo (tracked with Git LFS). Without it, the API returns 503.
+
+```bash
+git lfs install
+git lfs track "models/melanoma_model.pth"
+git add models/melanoma_model.pth .gitattributes
+git commit -m "Add model for deployment"
+git push
 ```
 
-2. Enable GitHub Pages:
-   - Repo → **Settings** → **Pages**
-   - Source: **Deploy from branch**
-   - Branch: `main` → folder: `/frontend`
+---
 
-3. Your site will be at: `https://YOUR_USERNAME.github.io/melanoma-detector/`
+## Part 3: Verify end-to-end
 
-## 4. CORS
+1. Open https://lucasdasilva8.github.io/melanoma-detector/
+2. Upload a test image
+3. First request after idle may take **30–60 seconds** (Render free tier cold start)
+4. You should see benign/melanoma probabilities
 
-The backend already allows all origins (`allow_origins=["*"]`). For production, consider restricting to your GitHub Pages domain.
+---
 
-## Cold starts
+## Updating after retraining
 
-Render free tier spins down after inactivity. First request after idle may take 30–60 seconds. This is normal for free hosting.
+1. Replace `models/melanoma_model.pth` locally
+2. Commit and push to `main`
+3. Render auto-redeploys the backend
+4. GitHub Pages auto-redeploys the frontend
 
-## Alternative: Netlify for frontend
+---
 
-1. Connect repo to [Netlify](https://netlify.com)
-2. Base directory: `frontend`
-3. Publish directory: `frontend`
-4. Update `config.js` with your API URL before deploying
+## Troubleshooting
+
+| Problem | Fix |
+|---------|-----|
+| Site loads but "Could not reach API" | Deploy Render backend; check URL in `config.js` |
+| API returns 503 | Model missing from repo — push via Git LFS |
+| Very slow first request | Render cold start — normal on free tier |
+| CORS errors | Backend already allows all origins; redeploy if needed |
+
+---
+
+## Improving accuracy on phone photos
+
+See [MODEL_IMPROVEMENT.md](MODEL_IMPROVEMENT.md).
