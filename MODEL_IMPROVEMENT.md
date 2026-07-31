@@ -24,26 +24,37 @@ Melanoma recall on validation should be **65%+**. If it's near 0%, training did 
 
 ---
 
-## Priority 2: Add real phone-photo data (biggest real-world gain)
+## Priority 2: Add Skin_Lesion_Dataset (built into notebook)
 
-Synthetic augmentation helps, but the best improvement is **real phone images** labeled by a dermatologist (or from public datasets with non-dermoscopic photos).
+The training notebook automatically merges **billalmanzoor/Skin_Lesion_Dataset**, which combines:
 
-### Public datasets to combine with HAM10000
+| Sub-dataset | Images | Type |
+|-------------|--------|------|
+| **ISIC 2019** | ~25,000 | Dermoscopy |
+| **MED-NODE** | ~170 | Non-dermoscopic clinical |
+| **PAD-UFES-20** | ~2,298 | Smartphone clinical |
 
-| Dataset | What it adds | Kaggle link |
-|---------|--------------|-------------|
-| **ISIC 2020** | Mix of image types | `melanoma-classification-v2` |
-| **PAD-UFES-20** | Smartphone clinical images | Search on Kaggle |
-| **HAM10000 + your own photos** | Your use case | Collect with labels |
+### Setup on Kaggle
 
-### How to mix datasets in training
+1. **Add Input** → `billalmanzoor/Skin_Lesion_Dataset`
+2. **Add Input** → `kmader/skin-cancer-mnist-ham10000`
+3. In Cell 5, confirm `USE_SKIN_LESION_DATASET = True`
+4. Run all cells
 
-1. Label every image as `melanoma` (1) or `benign` (0).
-2. Put all images in one folder with a CSV: `image_path, label`.
-3. Use the same `Ham10000Dataset` class — it only needs paths and labels.
-4. Oversample melanoma and phone-photo rows with `WeightedRandomSampler`.
+### How labels are mapped
 
-Even **50–100 labeled phone photos** mixed into HAM10000 can noticeably improve casual-photo performance.
+| Original label | Your label |
+|----------------|------------|
+| MEL / melanoma | melanoma (1) |
+| Everything else (NV, BCC, naevus, etc.) | benign (0) |
+
+Extra images are oversampled 3× during training.
+
+### Other datasets (optional)
+
+| Dataset | What it adds |
+|---------|--------------|
+| More ISIC years | Additional variety |
 
 ---
 

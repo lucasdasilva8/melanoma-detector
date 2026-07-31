@@ -20,9 +20,9 @@ melanoma-detector/
 ### 1. Train the model (Kaggle — free GPU)
 
 1. Create a [Kaggle](https://www.kaggle.com) account.
-2. Open [HAM10000 dataset](https://www.kaggle.com/datasets/kmader/skin-cancer-mnist-ham10000).
+2. Open [HAM10000](https://www.kaggle.com/datasets/kmader/skin-cancer-mnist-ham10000) and [Skin_Lesion_Dataset](https://www.kaggle.com/datasets/billalmanzoor/skin-lesion-dataset).
 3. Create a new **GPU notebook** and upload `training/train_ham10000.ipynb`.
-4. Run all cells. Download `melanoma_model.pth` when done.
+4. **Add Input** for both datasets. Run all cells. Download `melanoma_model.pth` when done.
 5. Place the file in `models/melanoma_model.pth`.
 
 For a quick local smoke test without training, run:
@@ -58,7 +58,9 @@ See [DEPLOY.md](DEPLOY.md) for GitHub Pages + Render setup.
 
 ## Improving accuracy on phone photos
 
-See [MODEL_IMPROVEMENT.md](MODEL_IMPROVEMENT.md) for retraining with phone-style augmentation and additional datasets.
+1. Add **Skin_Lesion_Dataset** on Kaggle (`billalmanzoor/Skin_Lesion_Dataset`) — ISIC 2019 + MED-NODE + PAD-UFES-20, merged automatically in Cell 5
+2. Retrain with `training/train_ham10000.ipynb`
+3. See [MODEL_IMPROVEMENT.md](MODEL_IMPROVEMENT.md) for the full guide
 
 ## Disclaimer
 
